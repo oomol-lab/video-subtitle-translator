@@ -49,7 +49,7 @@ Local: timestamp normalization, ASR cleanup, cue layout, ASS styling, and video 
 
 - [Node.js](https://nodejs.org/) 18 or newer
 - `ffmpeg` and `ffprobe`
-- The OOMOL `oo` CLI, authenticated and able to use:
+- The OOMOL `oo` CLI (required), authenticated and able to use:
   - `oo file upload`
   - the `fusion-api` connector
   - `oo llm config` when translation is requested
@@ -63,7 +63,35 @@ ffprobe -version
 oo --version
 ```
 
-## Installation
+### Install the required oo CLI
+
+The skill cannot run its ASR and translation workflow without `oo`. If it is
+not installed, the agent will stop and guide you through this one-time setup;
+it will not install software without your approval.
+
+macOS or Linux:
+
+```bash
+curl -fsSL https://cli.oomol.com/install.sh | bash
+```
+
+Windows PowerShell:
+
+```powershell
+irm https://cli.oomol.com/install.ps1 | iex
+```
+
+Then open a new terminal or refresh `PATH`, and authenticate:
+
+```bash
+oo --version
+oo auth login
+```
+
+See the [official installation guide](https://cli.oomol.com/install-guide.md)
+for other installation options.
+
+## Install the Skill
 
 Clone the repository into an agent skills directory:
 

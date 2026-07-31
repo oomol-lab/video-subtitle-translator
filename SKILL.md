@@ -1,12 +1,11 @@
 ---
 name: video-subtitle-translator
-description: 'Create subtitles for audio or video, translate them when requested, infer the target language from the user request when omitted, and default subtitled video delivery to burned-in MP4, with soft-subtitle MKV as the secondary mode. Use when the user asks to transcribe uploaded media, generate SRT/VTT subtitles, translate subtitles with an OOMOL-hosted LLM, or add subtitles to a video using FFmpeg and Fusion API ASR.'
-compatibility: "Requires the oo CLI."
+description: 'Create subtitles for audio or video, translate them when requested, infer the target language from the user request when omitted, and default subtitled video delivery to burned-in MP4, with soft-subtitle MKV as the secondary mode. Requires the oo CLI. Use when the user asks to transcribe uploaded media, generate SRT/VTT subtitles, translate subtitles with an OOMOL-hosted LLM, or add subtitles to a video using FFmpeg and Fusion API ASR.'
 metadata:
   icon: ':lucide:captions:'
   title: Video Subtitle Translator
   packageName: '@alwaysmavs/video-subtitle-translator'
-  version: 0.0.11
+  version: 0.0.12
 ---
 
 # Video Subtitle Translator
@@ -104,6 +103,23 @@ This skill ships a bundled helper script at `scripts/subtitle-tools.mjs`.
 Resolve it relative to this `SKILL.md` directory and prefer it for local
 transcript-to-subtitle conversion and LLM subtitle translation. Do not recreate
 the conversion or translation code inline when the script is available.
+
+### Required oo CLI Gate
+
+The OOMOL `oo` CLI is mandatory for this skill. Verify it before starting media
+processing:
+
+```bash
+oo --version
+```
+
+If the shell reports that `oo` is missing, or if a later `oo` command fails
+because authentication or configuration is unavailable, read
+[`references/oo-cli-setup.md`](references/oo-cli-setup.md) completely and
+follow it. Load that reference only for setup or recovery; do not load it when
+`oo` is already available and working. Do not silently replace Fusion API ASR
+or OO-hosted translation with another provider. If the user declines the
+required installation or sign-in, stop and explain that this skill cannot run.
 
 ### 1. Check FFmpeg First
 
@@ -649,6 +665,9 @@ Typical output names:
 
 ## Failure Handling
 
+- Missing `oo` CLI or unavailable OO authentication/configuration: read
+  `references/oo-cli-setup.md` and follow its matching recovery path. Do not
+  treat `oo: command not found` as an ordinary upload failure.
 - Missing FFmpeg or FFprobe: stop, give install instructions, and ask the user
   to rerun after installation.
 - Missing input media: stop and ask for the path or URL.

@@ -49,7 +49,7 @@ flowchart TB
 
 - [Node.js](https://nodejs.org/) 18 或更高版本
 - `ffmpeg` 和 `ffprobe`
-- 已完成认证并具备以下能力的 OOMOL `oo` CLI：
+- 必须安装并完成认证的 OOMOL `oo` CLI：
   - `oo file upload`
   - `fusion-api` connector
   - 翻译时使用的 `oo llm config`
@@ -63,7 +63,33 @@ ffprobe -version
 oo --version
 ```
 
-## 安装
+### 安装必需的 oo CLI
+
+没有 `oo`，这个 Skill 无法运行 ASR 和字幕翻译流程。如果尚未安装，Agent
+会停止任务并引导用户完成一次性安装；未经用户同意，不会自行安装软件。
+
+macOS 或 Linux：
+
+```bash
+curl -fsSL https://cli.oomol.com/install.sh | bash
+```
+
+Windows PowerShell：
+
+```powershell
+irm https://cli.oomol.com/install.ps1 | iex
+```
+
+安装后请打开新终端或刷新 `PATH`，然后完成认证：
+
+```bash
+oo --version
+oo auth login
+```
+
+其他安装方式参见 [官方安装指南](https://cli.oomol.com/install-guide.md)。
+
+## 安装 Skill
 
 将仓库克隆到 Agent Skills 目录：
 
