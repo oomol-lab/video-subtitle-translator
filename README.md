@@ -6,6 +6,34 @@ An AI-agent skill for creating, translating, formatting, and delivering subtitle
 
 It combines FFmpeg, the OOMOL Fusion API, an optional OOMOL-configured LLM, and a bundled Node.js helper to produce readable subtitle files and subtitled videos. Video delivery defaults to a burned-in MP4, with selectable soft-subtitle MKV as an alternative.
 
+## See it in action
+
+### English → Simplified Chinese subtitles
+
+Transcribe English narration, translate it into natural Simplified Chinese,
+format the cues for the screen, and burn the styled subtitles into an MP4.
+
+[![English video translated into Simplified Chinese subtitles](assets/demos/english-to-chinese.gif)](assets/demos/english-to-chinese.mp4)
+
+[▶ Watch the full English → Chinese MP4](assets/demos/english-to-chinese.mp4)
+
+### Japanese → English and Simplified Chinese subtitles
+
+Turn Japanese narration into timestamp-preserving English and Simplified
+Chinese subtitle outputs. The preview below shows the Simplified Chinese
+burn-in result; the same workflow can produce the English subtitle version.
+
+[![Japanese video translated into Simplified Chinese subtitles](assets/demos/japanese-to-english-chinese.gif)](assets/demos/japanese-to-english-chinese.mp4)
+
+[▶ Watch the full Japanese subtitle workflow MP4](assets/demos/japanese-to-english-chinese.mp4)
+
+The demo recordings use [“Generative AI explained in 2 minutes” by
+KI-Campus](https://commons.wikimedia.org/wiki/File:Generative_AI_explained_in_2_minutes.webm)
+and [“Job Interview” by Simpleshow
+Japan](https://commons.wikimedia.org/wiki/File:Job_Interview.webm), both under
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). The recordings
+show the agent workflow and modified subtitle outputs.
+
 ## Features
 
 - Extract and normalize audio from local video with FFmpeg.

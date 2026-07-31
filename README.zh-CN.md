@@ -6,6 +6,31 @@
 
 它组合使用 FFmpeg、OOMOL Fusion API、可选的 OOMOL LLM 配置和内置 Node.js 工具，生成可读的字幕文件与带字幕视频。视频默认交付为烧录字幕的 MP4，也支持将可开关字幕封装进 MKV。
 
+## 效果展示
+
+### 英文 → 简体中文字幕
+
+识别英文旁白，翻译成自然的简体中文，完成字幕分段与屏幕排版，并将带样式的字幕烧录进 MP4。
+
+[![英文视频翻译并烧录简体中文字幕](assets/demos/english-to-chinese.gif)](assets/demos/english-to-chinese.mp4)
+
+[▶ 查看完整的英文 → 中文 MP4 演示](assets/demos/english-to-chinese.mp4)
+
+### 日文 → 英文字幕和简体中文字幕
+
+识别日文旁白，在保留时间轴的情况下生成英文字幕和简体中文字幕。下面的预览展示简体中文字幕烧录效果，同一流程也可以输出英文字幕版本。
+
+[![日文视频翻译并烧录简体中文字幕](assets/demos/japanese-to-english-chinese.gif)](assets/demos/japanese-to-english-chinese.mp4)
+
+[▶ 查看完整的日文字幕工作流 MP4 演示](assets/demos/japanese-to-english-chinese.mp4)
+
+演示素材使用 KI-Campus 的 [《Generative AI explained in 2
+minutes》](https://commons.wikimedia.org/wiki/File:Generative_AI_explained_in_2_minutes.webm)
+和 Simpleshow Japan 的 [《Job
+Interview》](https://commons.wikimedia.org/wiki/File:Job_Interview.webm)，两者均采用
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) 授权。演示录像展示了
+Agent 的实际执行过程和经过翻译、排版及烧录的字幕输出。
+
 ## 功能
 
 - 使用 FFmpeg 从本地视频提取并规范化音频。
