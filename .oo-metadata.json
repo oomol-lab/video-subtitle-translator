@@ -1,4 +1,5 @@
 {
+  "icon": ":lucide:captions:",
   "kind": "registry",
   "packageName": "@alwaysmavs/video-subtitle-translator",
   "schemaVersion": 1,
