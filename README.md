@@ -13,6 +13,8 @@ It combines FFmpeg, the OOMOL Fusion API, an optional OOMOL-configured LLM, and 
 Transcribe English narration, translate it into natural Simplified Chinese,
 format the cues for the screen, and burn the styled subtitles into an MP4.
 
+[![Completed English to Simplified Chinese subtitle result](assets/demos/english-to-chinese-result.png)](https://github.com/oomol-lab/video-subtitle-translator/raw/refs/heads/main/assets/demos/english-to-chinese.mp4)
+
 [▶ Play the original English → Chinese MP4](https://github.com/oomol-lab/video-subtitle-translator/raw/refs/heads/main/assets/demos/english-to-chinese.mp4)
 
 ### Japanese → English and Simplified Chinese subtitles
@@ -20,6 +22,8 @@ format the cues for the screen, and burn the styled subtitles into an MP4.
 Turn Japanese narration into timestamp-preserving English and Simplified
 Chinese subtitle outputs. The preview below shows the Simplified Chinese
 burn-in result; the same workflow can produce the English subtitle version.
+
+[![Completed Japanese to Simplified Chinese subtitle result](assets/demos/japanese-to-chinese-result.png)](https://github.com/oomol-lab/video-subtitle-translator/raw/refs/heads/main/assets/demos/japanese-to-english-chinese.mp4)
 
 [▶ Play the original Japanese subtitle workflow MP4](https://github.com/oomol-lab/video-subtitle-translator/raw/refs/heads/main/assets/demos/japanese-to-english-chinese.mp4)
 

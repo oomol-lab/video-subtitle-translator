@@ -12,11 +12,15 @@
 
 识别英文旁白，翻译成自然的简体中文，完成字幕分段与屏幕排版，并将带样式的字幕烧录进 MP4。
 
+[![英文翻译成简体中文字幕后的最终成果](assets/demos/english-to-chinese-result.png)](https://github.com/oomol-lab/video-subtitle-translator/raw/refs/heads/main/assets/demos/english-to-chinese.mp4)
+
 [▶ 直接播放英文 → 中文原始 MP4](https://github.com/oomol-lab/video-subtitle-translator/raw/refs/heads/main/assets/demos/english-to-chinese.mp4)
 
 ### 日文 → 英文字幕和简体中文字幕
 
 识别日文旁白，在保留时间轴的情况下生成英文字幕和简体中文字幕。下面的预览展示简体中文字幕烧录效果，同一流程也可以输出英文字幕版本。
+
+[![日文翻译成简体中文字幕后的最终成果](assets/demos/japanese-to-chinese-result.png)](https://github.com/oomol-lab/video-subtitle-translator/raw/refs/heads/main/assets/demos/japanese-to-english-chinese.mp4)
 
 [▶ 直接播放日文字幕工作流原始 MP4](https://github.com/oomol-lab/video-subtitle-translator/raw/refs/heads/main/assets/demos/japanese-to-english-chinese.mp4)
 
