@@ -12,17 +12,13 @@
 
 识别英文旁白，翻译成自然的简体中文，完成字幕分段与屏幕排版，并将带样式的字幕烧录进 MP4。
 
-[![英文视频翻译并烧录简体中文字幕](assets/demos/english-to-chinese.gif)](assets/demos/english-to-chinese.mp4)
-
-[▶ 查看完整的英文 → 中文 MP4 演示](assets/demos/english-to-chinese.mp4)
+[▶ 直接播放英文 → 中文原始 MP4](https://github.com/oomol-lab/video-subtitle-translator/raw/refs/heads/main/assets/demos/english-to-chinese.mp4)
 
 ### 日文 → 英文字幕和简体中文字幕
 
 识别日文旁白，在保留时间轴的情况下生成英文字幕和简体中文字幕。下面的预览展示简体中文字幕烧录效果，同一流程也可以输出英文字幕版本。
 
-[![日文视频翻译并烧录简体中文字幕](assets/demos/japanese-to-english-chinese.gif)](assets/demos/japanese-to-english-chinese.mp4)
-
-[▶ 查看完整的日文字幕工作流 MP4 演示](assets/demos/japanese-to-english-chinese.mp4)
+[▶ 直接播放日文字幕工作流原始 MP4](https://github.com/oomol-lab/video-subtitle-translator/raw/refs/heads/main/assets/demos/japanese-to-english-chinese.mp4)
 
 演示素材使用 KI-Campus 的 [《Generative AI explained in 2
 minutes》](https://commons.wikimedia.org/wiki/File:Generative_AI_explained_in_2_minutes.webm)

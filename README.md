@@ -13,9 +13,7 @@ It combines FFmpeg, the OOMOL Fusion API, an optional OOMOL-configured LLM, and 
 Transcribe English narration, translate it into natural Simplified Chinese,
 format the cues for the screen, and burn the styled subtitles into an MP4.
 
-[![English video translated into Simplified Chinese subtitles](assets/demos/english-to-chinese.gif)](assets/demos/english-to-chinese.mp4)
-
-[▶ Watch the full English → Chinese MP4](assets/demos/english-to-chinese.mp4)
+[▶ Play the original English → Chinese MP4](https://github.com/oomol-lab/video-subtitle-translator/raw/refs/heads/main/assets/demos/english-to-chinese.mp4)
 
 ### Japanese → English and Simplified Chinese subtitles
 
@@ -23,9 +21,7 @@ Turn Japanese narration into timestamp-preserving English and Simplified
 Chinese subtitle outputs. The preview below shows the Simplified Chinese
 burn-in result; the same workflow can produce the English subtitle version.
 
-[![Japanese video translated into Simplified Chinese subtitles](assets/demos/japanese-to-english-chinese.gif)](assets/demos/japanese-to-english-chinese.mp4)
-
-[▶ Watch the full Japanese subtitle workflow MP4](assets/demos/japanese-to-english-chinese.mp4)
+[▶ Play the original Japanese subtitle workflow MP4](https://github.com/oomol-lab/video-subtitle-translator/raw/refs/heads/main/assets/demos/japanese-to-english-chinese.mp4)
 
 The demo recordings use [“Generative AI explained in 2 minutes” by
 KI-Campus](https://commons.wikimedia.org/wiki/File:Generative_AI_explained_in_2_minutes.webm)
