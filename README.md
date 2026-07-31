@@ -2,332 +2,82 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-An AI-agent skill for creating, translating, formatting, and delivering subtitles for local audio and video.
+An AI-agent skill that turns audio or video into translated, readable
+subtitles—and delivers a ready-to-share video.
 
-It combines FFmpeg, the OOMOL Fusion API, an optional OOMOL-configured LLM, and a bundled Node.js helper to produce readable subtitle files and subtitled videos. Video delivery defaults to a burned-in MP4, with selectable soft-subtitle MKV as an alternative.
+It transcribes speech with OOMOL Fusion API, optionally translates it, formats
+the subtitles locally, then burns them into MP4 by default. Selectable subtitle
+tracks in MKV are also supported.
 
 ## See it in action
 
-### English → Simplified Chinese subtitles
-
-Transcribe English narration, translate it into natural Simplified Chinese,
-format the cues for the screen, and burn the styled subtitles into an MP4.
+### English → Simplified Chinese
 
 [![English video translated into Simplified Chinese subtitles](assets/demos/english-to-chinese.gif)](assets/demos/english-to-chinese.mp4)
 
-[▶ Watch the full English → Chinese MP4](assets/demos/english-to-chinese.mp4)
+[▶ Watch the full MP4](assets/demos/english-to-chinese.mp4)
 
-### Japanese → English and Simplified Chinese subtitles
-
-Turn Japanese narration into timestamp-preserving English and Simplified
-Chinese subtitle outputs. The preview below shows the Simplified Chinese
-burn-in result; the same workflow can produce the English subtitle version.
+### Japanese → English and Simplified Chinese
 
 [![Japanese video translated into Simplified Chinese subtitles](assets/demos/japanese-to-english-chinese.gif)](assets/demos/japanese-to-english-chinese.mp4)
 
-[▶ Watch the full Japanese subtitle workflow MP4](assets/demos/japanese-to-english-chinese.mp4)
+[▶ Watch the full MP4](assets/demos/japanese-to-english-chinese.mp4)
 
-The demo recordings use [“Generative AI explained in 2 minutes” by
-KI-Campus](https://commons.wikimedia.org/wiki/File:Generative_AI_explained_in_2_minutes.webm)
-and [“Job Interview” by Simpleshow
-Japan](https://commons.wikimedia.org/wiki/File:Job_Interview.webm), both under
-[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). The recordings
-show the agent workflow and modified subtitle outputs.
+The Japanese preview shows the Simplified Chinese burn-in; the same workflow
+can output English subtitles. Demo media credits and licenses are listed in the
+[guide](docs/guide.md#demo-media).
 
-## Features
+## What it does
 
-- Extract and normalize audio from local video with FFmpeg.
-- Upload local media through the `oo` CLI and transcribe it with Fusion API ASR.
-- Generate timed SRT and WebVTT subtitles from word-level timestamps.
-- Remove narrowly scoped Fusion ASR artifacts without rewriting user-provided or translated subtitle text.
-- Translate subtitle cues with an OpenAI-compatible LLM configured by `oo llm config`.
-- Resume interrupted translations only when checkpoint cue indexes and source text still match.
-- Reflow CJK and Latin subtitles into readable display lines.
-- Generate resolution-aware ASS subtitles for consistent styling and positioning.
-- Burn subtitles into MP4 by default, or package selectable SRT/ASS tracks into MKV.
+- Transcribes local audio or video into timed subtitles.
+- Translates subtitles while preserving cue order and timing.
+- Produces readable SRT, VTT, and styled ASS files.
+- Burns subtitles into MP4 by default, or packages selectable tracks in MKV.
 
-## Architecture
+## How it works
 
 ```mermaid
-flowchart TB
-    subgraph CORE["Core processing"]
-        direction LR
-        INPUT["Video / Audio"]
-        PREP["① Prepare audio<br/>FFmpeg + oo upload"]
-        ASR["② Transcribe<br/>Fusion API ASR"]
-        LOCAL["③ Format locally<br/>optional LLM → SRT / ASS"]
-        INPUT --> PREP --> ASR --> LOCAL
-    end
-
-    LOCAL --> DELIVERY{"④ Deliver"}
-    DELIVERY -->|"Default"| BURN["Burned-in MP4<br/>FFprobe + FFmpeg + libass"]
-    DELIVERY -->|"Optional"| MKV["Soft-subtitle MKV<br/>SRT / ASS track"]
-    BURN --> OUTPUT["Video + subtitle files"]
-    MKV --> OUTPUT
+flowchart LR
+    INPUT["Video / Audio"] --> AUDIO["Extract & upload audio"]
+    AUDIO --> ASR["ASR transcript"]
+    ASR --> LOCAL["Translate & format locally"]
+    LOCAL --> OUTPUT["Burned-in MP4<br/>or soft-subtitle MKV"]
 ```
 
-The main responsibility boundary is:
+FFmpeg prepares the audio, `oo` uploads it and calls Fusion API ASR, the bundled
+helper builds and optionally translates subtitles locally, and FFmpeg produces
+the final video.
+
+## Quick start
+
+Requirements: Node.js 18+, FFmpeg/FFprobe, and an authenticated
+[OOMOL `oo` CLI](https://static.oomol.com/oo-cli/skill-install-guide/install.md).
+
+Install the public skill:
+
+```bash
+oo skills install @alwaysmavs/video-subtitle-translator
+```
+
+Then ask your agent in natural language:
 
 ```text
-Cloud: media hosting, speech recognition, and optional translation
-Local: timestamp normalization, ASR cleanup, cue layout, ASS styling, and video delivery
-```
-
-## Requirements
-
-- [Node.js](https://nodejs.org/) 18 or newer
-- `ffmpeg` and `ffprobe`
-- The OOMOL `oo` CLI (required), authenticated and able to use:
-  - `oo file upload`
-  - the `fusion-api` connector
-  - `oo llm config` when translation is requested
-
-Check the local runtime:
-
-```bash
-node --version
-ffmpeg -version
-ffprobe -version
-oo --version
-```
-
-### Install the required oo CLI
-
-The skill cannot run its ASR and translation workflow without `oo`. If it is
-not installed, the agent will stop and guide you through this one-time setup;
-it will not install software without your approval.
-
-macOS or Linux:
-
-```bash
-curl -fsSL https://cli.oomol.com/install.sh | bash
-```
-
-Windows PowerShell:
-
-```powershell
-irm https://cli.oomol.com/install.ps1 | iex
-```
-
-Then open a new terminal or refresh `PATH`, and authenticate:
-
-```bash
-oo --version
-oo auth login
-```
-
-See the [official installation guide](https://cli.oomol.com/install-guide.md)
-for other installation options.
-
-## Install the Skill
-
-Clone the repository into an agent skills directory:
-
-```bash
-git clone https://github.com/oomol-lab/video-subtitle-translator.git \
-  ~/.agents/skills/video-subtitle-translator
-```
-
-Alternatively, clone it anywhere and link it into the skills directory:
-
-```bash
-git clone https://github.com/oomol-lab/video-subtitle-translator.git
-mkdir -p ~/.agents/skills
-ln -s "$(pwd)/video-subtitle-translator" \
-  ~/.agents/skills/video-subtitle-translator
-```
-
-Restart or refresh the agent environment after installation so it can discover `SKILL.md`.
-
-## Usage
-
-The skill is designed to be invoked through an AI agent. Example requests:
-
-```text
-Create Simplified Chinese subtitles for this video and burn them into an MP4.
+Translate this English video into Simplified Chinese and burn the subtitles into an MP4.
 ```
 
 ```text
-Transcribe this audio and return SRT and VTT files without translation.
+Translate this Japanese video into English and Chinese subtitles, and package them as selectable MKV tracks.
 ```
 
-```text
-Translate this interview into Japanese and package the subtitles as a selectable MKV track.
-```
+If no delivery mode is specified, the skill creates a burned-in MP4. Ask for
+MKV, soft subtitles, selectable tracks, or no re-encoding when you want a soft
+subtitle output.
 
-```text
-Create natural Chinese subtitles for this technical course. Keep API names and code terms in English.
-```
+## Documentation
 
-If translation is clearly requested but the target language is omitted, the skill infers the target from the language of the request. If it is unclear whether translation is wanted, the agent asks before starting the job.
-
-## Processing Pipeline
-
-### 1. Audio preparation and upload
-
-For local video or media that needs normalization, the skill extracts a mono 16 kHz WAV:
-
-```bash
-ffmpeg -y -i "$INPUT_MEDIA" \
-  -vn -ac 1 -ar 16000 -c:a pcm_s16le \
-  "$WORK_DIR/audio.wav"
-```
-
-The local file is uploaded before it is passed to the cloud ASR service:
-
-```bash
-oo file upload "$AUDIO_PATH" --json
-```
-
-Only the returned public `downloadUrl` is sent to Fusion API. Local filesystem paths are never passed directly to the cloud action.
-
-### 2. Fusion API transcription
-
-The ASR workflow uses three connector actions:
-
-```text
-qwen_asr_filetrans_submit
-        ↓
-qwen_asr_filetrans_state
-        ↓
-qwen_asr_filetrans_result
-```
-
-The full result is preserved as `transcript.json`. Fusion timestamps are treated as milliseconds by default and normalized to seconds locally.
-
-### 3. Local subtitle formatting
-
-The bundled helper provides four commands:
-
-```bash
-node scripts/subtitle-tools.mjs fusion-to-subtitles --help
-node scripts/subtitle-tools.mjs translate-srt --help
-node scripts/subtitle-tools.mjs prepare-display-srt --help
-node scripts/subtitle-tools.mjs srt-to-burn-ass --help
-```
-
-Typical transcript conversion:
-
-```bash
-node scripts/subtitle-tools.mjs fusion-to-subtitles \
-  --input "$WORK_DIR/transcript.json" \
-  --out-dir "$WORK_DIR" \
-  --time-unit ms \
-  --formats srt
-```
-
-Typical display formatting:
-
-```bash
-node scripts/subtitle-tools.mjs prepare-display-srt \
-  --input "$WORK_DIR/translation.zh.srt" \
-  --output "$WORK_DIR/translation.zh.display.srt" \
-  --cjk-line-length 18 \
-  --max-lines 2
-```
-
-### 4. Video delivery
-
-#### Burned-in MP4 — default
-
-The final SRT is converted to ASS using the real video dimensions, then burned into the video:
-
-```bash
-ffmpeg -y -i "$INPUT_VIDEO" \
-  -vf "ass=$WORK_DIR/subtitles.burn.ass" \
-  -c:v libx264 -crf 18 -preset medium \
-  -c:a copy -sn \
-  "$OUTPUT_VIDEO.burned.mp4"
-```
-
-Use this mode for social platforms, mobile playback, uploads, and other environments where subtitles must always be visible.
-
-#### Soft-subtitle MKV — optional
-
-Package a selectable subtitle track without burning it into the image:
-
-```bash
-ffmpeg -y -i "$INPUT_VIDEO" -i "$SUBTITLE_SRT" \
-  -map 0:v? -map 0:a? -map 1:0 \
-  -c copy -c:s srt \
-  -disposition:s:0 default \
-  -metadata:s:s:0 language="$LANG_CODE" \
-  "$OUTPUT_VIDEO.subtitled.mkv"
-```
-
-Use this mode when subtitles should remain selectable or editable, when multiple subtitle languages are needed, or when avoiding video re-encoding matters.
-
-## Translation
-
-Translation uses the OpenAI-compatible model returned by:
-
-```bash
-oo llm config --json
-```
-
-The helper translates cue text in batches while preserving indexes and timestamps. It supports translation profiles for film and television, technical courses, interviews, news, business training, gaming, children’s content, and general video.
-
-To resume an interrupted translation:
-
-```bash
-node scripts/subtitle-tools.mjs translate-srt \
-  --input "$WORK_DIR/transcript.srt" \
-  --out-dir "$WORK_DIR" \
-  --target-language "Simplified Chinese" \
-  --target-code zh \
-  --resume
-```
-
-Checkpoint entries are reused only when both the cue index and saved source text match the current SRT.
-
-## ASR Cleanup Policy
-
-Noise cleanup is intentionally restricted to Fusion ASR input:
-
-- A complete ASR token containing only three or more zeroes, such as `000`, is treated as a probable artifact.
-- Duplicate punctuation is not appended when the ASR word already contains it.
-- Normal expressive forms such as `...`, `??`, `!!`, and `?!` are preserved.
-- Only clearly excessive punctuation runs are normalized.
-- User-provided SRT, LLM translations, and checkpoint text are not subjected to destructive cleanup.
-
-When cleanup occurs, the helper reports how many probable zero artifacts and punctuation runs were repaired.
-
-## Outputs
-
-A typical job can produce:
-
-```text
-job.created.json
-job.done.json
-transcript.json
-transcript.txt
-transcript.srt
-transcript.word-timed.srt
-translation.<language>.json
-translation.<language>.srt
-translation.<language>.display.srt
-translation.<language>.display.ass
-<name>.burned.mp4
-<name>.subtitled.mkv
-```
-
-## Security and Privacy
-
-- Local media is uploaded to obtain a URL that Fusion API can access.
-- Translation text is sent to the LLM configured by `oo llm config`.
-- API keys are read at runtime and must not be committed, printed, or written into output files.
-- Raw transcript JSON is preserved locally for debugging and recovery, but should not be published when it contains sensitive speech.
-
-## Contributing
-
-Issues and pull requests are welcome. When changing subtitle conversion behavior, include a small fixture that covers the affected timestamp, punctuation, language, or checkpoint edge case.
-
-Before submitting a change, at minimum run:
-
-```bash
-node --check scripts/subtitle-tools.mjs
-node scripts/subtitle-tools.mjs --help
-```
+- [Setup, workflow, output files, privacy, and troubleshooting](docs/guide.md)
+- [Complete agent instructions](SKILL.md)
+- [oo CLI setup and recovery](references/oo-cli-setup.md)
 
 ## License
 
