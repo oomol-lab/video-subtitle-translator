@@ -1,5 +1,7 @@
 # Video Subtitle Translator
 
+[English](README.md) | [简体中文](README.zh-CN.md)
+
 An AI-agent skill for creating, translating, formatting, and delivering subtitles for local audio and video.
 
 It combines FFmpeg, the OOMOL Fusion API, an optional OOMOL-configured LLM, and a bundled Node.js helper to produce readable subtitle files and subtitled videos. Video delivery defaults to a burned-in MP4, with selectable soft-subtitle MKV as an alternative.
@@ -19,44 +21,19 @@ It combines FFmpeg, the OOMOL Fusion API, an optional OOMOL-configured LLM, and 
 ## Architecture
 
 ```mermaid
-flowchart TD
-    INPUT["Input video or audio"]
+flowchart LR
+    INPUT["Video / Audio"]
+    PREP["① Prepare audio<br/>FFmpeg → 16 kHz WAV<br/>oo file upload"]
+    ASR["② Transcribe<br/>Fusion API ASR<br/>submit → poll → result"]
+    LOCAL["③ Format locally<br/>optional LLM translation<br/>cleanup → cues → SRT / ASS"]
+    DELIVERY{"④ Deliver"}
+    BURN["Default<br/>Burned-in MP4<br/>FFprobe + FFmpeg + libass"]
+    MKV["Optional<br/>Soft-subtitle MKV<br/>SRT / ASS track"]
+    OUTPUT["Video + subtitle files"]
 
-    STEP1["① Extract and upload audio<br/><br/>FFmpeg creates mono 16 kHz WAV<br/>oo file upload returns a public downloadUrl"]
-
-    AUDIO["audio.wav<br/>downloadUrl"]
-
-    STEP2["② Generate transcript<br/><br/>Fusion API ASR<br/>Submit job → poll state → fetch result"]
-
-    TRANSCRIPT["transcript.json<br/>Text and word-level timestamps"]
-
-    TRANSLATE["Optional subtitle translation<br/><br/>oo llm config<br/>OpenAI-compatible Chat Completions<br/>Original cue timing is preserved"]
-
-    STEP3["③ Format subtitles locally<br/><br/>subtitle-tools.mjs<br/>Clean scoped ASR artifacts<br/>Normalize timing, segment cues, and wrap lines"]
-
-    SUBTITLES["display.srt<br/>subtitles.ass"]
-
-    DELIVERY{"④ Choose video delivery"}
-
-    BURN["Default: burned-in MP4<br/><br/>FFprobe reads video dimensions<br/>FFmpeg + libass burns styled ASS subtitles<br/>Subtitles remain visible everywhere"]
-
-    MKV["Optional: soft-subtitle MKV<br/><br/>FFmpeg packages SRT or ASS subtitle tracks<br/>Subtitles remain selectable<br/>Video can usually be stream-copied"]
-
-    OUTPUT["Output<br/><br/>Burned-in MP4 or soft-subtitle MKV<br/>SRT and ASS sidecar files"]
-
-    INPUT --> STEP1
-    STEP1 --> AUDIO
-    AUDIO --> STEP2
-    STEP2 --> TRANSCRIPT
-    TRANSCRIPT --> STEP3
-    TRANSCRIPT -. "When translation is requested" .-> TRANSLATE
-    TRANSLATE -. "Translated cue text" .-> STEP3
-    STEP3 --> SUBTITLES
-    SUBTITLES --> DELIVERY
-    DELIVERY -->|"Default"| BURN
-    DELIVERY -->|"Selectable subtitles requested"| MKV
-    BURN --> OUTPUT
-    MKV --> OUTPUT
+    INPUT --> PREP --> ASR --> LOCAL --> DELIVERY
+    DELIVERY --> BURN --> OUTPUT
+    DELIVERY --> MKV --> OUTPUT
 ```
 
 The main responsibility boundary is:
