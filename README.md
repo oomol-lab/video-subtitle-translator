@@ -21,19 +21,21 @@ It combines FFmpeg, the OOMOL Fusion API, an optional OOMOL-configured LLM, and 
 ## Architecture
 
 ```mermaid
-flowchart LR
-    INPUT["Video / Audio"]
-    PREP["① Prepare audio<br/>FFmpeg → 16 kHz WAV<br/>oo file upload"]
-    ASR["② Transcribe<br/>Fusion API ASR<br/>submit → poll → result"]
-    LOCAL["③ Format locally<br/>optional LLM translation<br/>cleanup → cues → SRT / ASS"]
-    DELIVERY{"④ Deliver"}
-    BURN["Default<br/>Burned-in MP4<br/>FFprobe + FFmpeg + libass"]
-    MKV["Optional<br/>Soft-subtitle MKV<br/>SRT / ASS track"]
-    OUTPUT["Video + subtitle files"]
+flowchart TB
+    subgraph CORE["Core processing"]
+        direction LR
+        INPUT["Video / Audio"]
+        PREP["① Prepare audio<br/>FFmpeg + oo upload"]
+        ASR["② Transcribe<br/>Fusion API ASR"]
+        LOCAL["③ Format locally<br/>optional LLM → SRT / ASS"]
+        INPUT --> PREP --> ASR --> LOCAL
+    end
 
-    INPUT --> PREP --> ASR --> LOCAL --> DELIVERY
-    DELIVERY --> BURN --> OUTPUT
-    DELIVERY --> MKV --> OUTPUT
+    LOCAL --> DELIVERY{"④ Deliver"}
+    DELIVERY -->|"Default"| BURN["Burned-in MP4<br/>FFprobe + FFmpeg + libass"]
+    DELIVERY -->|"Optional"| MKV["Soft-subtitle MKV<br/>SRT / ASS track"]
+    BURN --> OUTPUT["Video + subtitle files"]
+    MKV --> OUTPUT
 ```
 
 The main responsibility boundary is:

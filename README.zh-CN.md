@@ -21,19 +21,21 @@
 ## 架构
 
 ```mermaid
-flowchart LR
-    INPUT["视频 / 音频"]
-    PREP["① 准备音频<br/>FFmpeg → 16 kHz WAV<br/>oo file upload"]
-    ASR["② 语音识别<br/>Fusion API ASR<br/>提交 → 轮询 → 获取结果"]
-    LOCAL["③ 本地排版<br/>可选 LLM 翻译<br/>清理 → 分段 → SRT / ASS"]
-    DELIVERY{"④ 视频交付"}
-    BURN["默认<br/>烧录字幕 MP4<br/>FFprobe + FFmpeg + libass"]
-    MKV["可选<br/>软字幕 MKV<br/>SRT / ASS 字幕轨"]
-    OUTPUT["视频与字幕文件"]
+flowchart TB
+    subgraph CORE["核心处理"]
+        direction LR
+        INPUT["视频 / 音频"]
+        PREP["① 准备音频<br/>FFmpeg + oo 上传"]
+        ASR["② 语音识别<br/>Fusion API ASR"]
+        LOCAL["③ 本地排版<br/>可选 LLM → SRT / ASS"]
+        INPUT --> PREP --> ASR --> LOCAL
+    end
 
-    INPUT --> PREP --> ASR --> LOCAL --> DELIVERY
-    DELIVERY --> BURN --> OUTPUT
-    DELIVERY --> MKV --> OUTPUT
+    LOCAL --> DELIVERY{"④ 视频交付"}
+    DELIVERY -->|"默认"| BURN["烧录字幕 MP4<br/>FFprobe + FFmpeg + libass"]
+    DELIVERY -->|"可选"| MKV["软字幕 MKV<br/>SRT / ASS 字幕轨"]
+    BURN --> OUTPUT["视频与字幕文件"]
+    MKV --> OUTPUT
 ```
 
 主要职责边界：
