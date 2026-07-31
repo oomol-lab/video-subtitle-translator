@@ -6,6 +6,25 @@
 
 它组合使用 FFmpeg、OOMOL Fusion API、可选的 OOMOL LLM 配置和内置 Node.js 工具，生成可读的字幕文件与带字幕视频。视频默认交付为烧录字幕的 MP4，也支持将可开关字幕封装进 MKV。
 
+## 为阅读而设计
+
+字幕展示以 Netflix
+[Timed Text Style Guide](https://partnerhelp.netflixstudios.com/hc/en-us/articles/215758617-Timed-Text-Style-Guide-General-Requirements)
+的可读性原则为主要设计基准，重点控制字幕停留时长、每行长度、自然断行和画面位置：
+
+- 单条字幕目标停留约 2.8 秒，最长不超过 4.2 秒。
+- 最多显示两行；能用一行清晰表达时，优先使用一行。
+- CJK 字幕默认每行 18 个字符；简体中文可采用 Netflix
+  [简体中文指南](https://partnerhelp.netflixstudios.com/hc/en-us/articles/215986007-Chinese-Simplified-Timed-Text-Style-Guide)
+  中更严格的每行 16 个字符限制。
+- 文字过长时拆分成连续字幕，而不是把大量文字挤进同一个画面。
+- 两行字幕优先按自然语义断句，并采用下行较长的视觉结构。
+- 烧录字幕会根据视频分辨率生成底部居中的白字黑描边样式。
+
+目标很简单：让观众少花时间读字幕，把注意力留给画面。这里采用的是以
+Netflix 标准为参照的可读性设计，并不表示已通过 Netflix 交付认证，也不宣称
+完整符合 Netflix 针对所有语言制定的每一项规范。
+
 ## 效果展示
 
 ### 英文 → 简体中文字幕

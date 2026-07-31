@@ -6,6 +6,26 @@ An AI-agent skill for creating, translating, formatting, and delivering subtitle
 
 It combines FFmpeg, the OOMOL Fusion API, an optional OOMOL-configured LLM, and a bundled Node.js helper to produce readable subtitle files and subtitled videos. Video delivery defaults to a burned-in MP4, with selectable soft-subtitle MKV as an alternative.
 
+## Readable by design
+
+Subtitle presentation is designed around the readability principles in Netflix's
+[Timed Text Style Guide](https://partnerhelp.netflixstudios.com/hc/en-us/articles/215758617-Timed-Text-Style-Guide-General-Requirements),
+including concise cues, controlled line length, natural phrase-aware line breaks,
+and unobtrusive placement:
+
+- Each cue targets about 2.8 seconds on screen and is capped at 4.2 seconds.
+- Subtitles use no more than two lines, with one line preferred whenever possible.
+- CJK subtitles default to 18 characters per line; Simplified Chinese can use the
+  stricter 16-character limit from Netflix's
+  [Simplified Chinese guide](https://partnerhelp.netflixstudios.com/hc/en-us/articles/215986007-Chinese-Simplified-Timed-Text-Style-Guide).
+- Long text is divided into consecutive cues instead of being squeezed onto the screen.
+- Two-line subtitles favor natural phrase boundaries and a bottom-heavy shape.
+- Burned-in subtitles use resolution-aware, bottom-centered white text with a black outline.
+
+The goal is simple: spend less time reading and more time watching. These are
+Netflix-informed readability defaults, not a claim of Netflix delivery
+certification or full compliance with every language-specific specification.
+
 ## See it in action
 
 ### English → Simplified Chinese subtitles
